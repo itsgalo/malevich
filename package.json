@@ -40,6 +40,7 @@
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
     "react-dev-utils": "^0.5.2",
+    "react-fabricjs": "^0.1.6",
     "react-router-dom": "^4.1.1",
     "react-sketch": "^0.3.2",
     "sass-loader": "^6.0.5",
