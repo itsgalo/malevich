@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
-import './App.css';
-import Canvas from './Fabric';
+import { createEngine } from './components/engine'
+import { createRender } from './components/render'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Canvas/>
-      </div>
-    );
-  }
+import { Engine, Render } from 'matter-js'
+
+export default ({element}) => {
+  const { engine, width } = createEngine()
+  const render = createRender({element, engine, width})
+  Engine.run(engine)
+  Render.run(render)
 }
-
-export default App;
