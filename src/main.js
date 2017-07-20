@@ -14,13 +14,15 @@ import Matter from 'matter-js'
     var width = window.getComputedStyle(root).width;
     var height = window.getComputedStyle(root).height;
 
-    var engine = Engine.create({
-       element: document.body,
-       options: {
-         width: parseInt(width),
-         height: parseInt(height)
-     }
-   });
+    var engine = Engine.create();
+
+  //   var engine = Engine.create({
+  //      element: document.body,
+  //      options: {
+  //        width: parseInt(width),
+  //        height: parseInt(height)
+  //    }
+  //  });
 
     // create two boxes and a ground
     var ball = Bodies.circle(420, 15, 20);
@@ -66,9 +68,19 @@ import Matter from 'matter-js'
     // keep the mouse in sync with rendering
     render.mouse = mouse;
 
-    var canvas = document.getElementsByTagName('canvas')
-    console.log(canvas[0]);
-    canvas[0].setAttribute('style','width:100%;height:100vh;object-fit:contain;')
+    window.addEventListener('resize', resize_canvas)
+
+    resize_canvas()
+
+    function resize_canvas() {
+      var canvas = document.getElementsByTagName('canvas')
+      console.log(canvas[0]);
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      canvas[0].setAttribute('width',w)
+      canvas[0].setAttribute('height',h)
+      canvas[0].setAttribute('style','object-fit:contain;')
+    }
 
     // fit the render viewport to the scene
     // Render.lookAt(render, {
