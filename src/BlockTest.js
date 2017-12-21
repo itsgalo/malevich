@@ -19,9 +19,16 @@ p5.setup = function(){
 p5.draw = function() {
   p5.background(0);
   p5.ellipse(250, 250, scale, scale);
-  scale += 1;
+  scale = 10;
 
 }
+
+p5.windowResized = function() {
+  p5.resizeCanvas(p5.windowWidth, p5.windowHeight)
 }
+
+}
+
+
 
 new p5(sketch);
