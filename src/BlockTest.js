@@ -8,6 +8,7 @@ var scale = 1;
 
 const sketch = (p5) => {
 
+
 p5.setup = function(){
   canvas = p5.createCanvas(w, h);
   p5.background(0);
@@ -18,8 +19,12 @@ p5.setup = function(){
 
 p5.draw = function() {
   p5.background(0);
-  p5.ellipse(250, 250, scale, scale);
-  scale = 10;
+  for (var j = 0; j < h; j += 40){
+  for (var i = 0; i < w; i += 40) {
+    p5.ellipse(i, j, scale, scale);
+    scale = 20;
+  }
+  }
 
 }
 
