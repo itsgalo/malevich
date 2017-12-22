@@ -1,5 +1,6 @@
 body {
   overflow: hidden;
+  cursor: move;
 }
 button {
   background-color: rgb(250, 130, 40);
@@ -9,4 +10,5 @@ button {
   font-size: 14pt;
   font-weight: bold;
   padding: 18px;
+  cursor: grabbing;
 }

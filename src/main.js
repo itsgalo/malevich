@@ -154,7 +154,6 @@ const sketch = (p5) => {
 
 
 function toggleGravity() {
-
   if(runner.enabled == false){
     gravButton.style("background-color", p5.color(255, 50, 50));
     runner.enabled = true;
@@ -271,11 +270,14 @@ p5.draw = function() {
       shapes.splice(i, 1);
     }
   }
-
+  p5.print(painting);
 }
 //stores initial click
 p5.mousePressed = function() {
-  painting = true;
+
+  if (p5.mouseY > 100) {
+    painting = true;
+  }
   p5.noStroke();
   previousPos.x = p5.mouseX;
   previousPos.y = p5.mouseY;
@@ -283,29 +285,27 @@ p5.mousePressed = function() {
 }
 //bakes the shape
 p5.mouseReleased = function() {
+  //rectangle geometry calc
+  rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
+  rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
-    painting = false;
-    if (mConstraint.body == null) {
+  if (mConstraint.body == null && p5.mouseY > 100) {
 
-      if (c == true){
-        shapes.push(new circ(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-      } else if (s == true) {
-        shapes.push(new square(previousPos.x, previousPos.y, rectW, rectH));
-      } else if (t == true) {
-        shapes.push(new poly(previousPos.x, previousPos.y, 3, currentPos.x, currentPos.y));
-      }
+    if (c == true){
+      shapes.push(new circ(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
+    } else if (s == true) {
+      shapes.push(new square(previousPos.x, previousPos.y, rectW, rectH));
+    } else if (t == true) {
+      shapes.push(new poly(previousPos.x, previousPos.y, 3, currentPos.x, currentPos.y));
     }
+    painting = false;
+  }
 }
 //draws guide lines
 p5.mouseDragged = function() {
-  painting = true;
   //rectangle geometry calc
-  var rh = p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-  var rh2 = p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0));
-  rectH = p5.sqrt(rh-rh2);
-  var rw = p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-  var rw2 = p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y));
-  rectW = p5.sqrt(rw-rw2);
+  rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
+  rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
   p5.fill(230, 200);
   p5.stroke(40);
