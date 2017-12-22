@@ -1,5 +1,4 @@
-//import main from './main'
-import main from './BlockTest'
+import main from './main'
 import "./scss/main.scss"
 
 export default (document) => {
