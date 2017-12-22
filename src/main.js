@@ -154,15 +154,15 @@ const sketch = (p5) => {
 
 
 function toggleGravity() {
-  if(runner.enabled == false){
+  if(engine.world.gravity.y == 0) {
     gravButton.style("background-color", p5.color(255, 50, 50));
-    runner.enabled = true;
-    Runner.start(runner, engine);
+    //runner.enabled = true;
+    //Runner.start(runner, engine);
     engine.world.gravity.y = 1;
-  } else if (runner.enabled == true) {
+  } else if (engine.world.gravity.y == 1) {
     gravButton.style("background-color", p5.color(250, 130, 40));
-    Runner.stop(runner)
-    runner.enabled = false;
+    //Runner.stop(runner)
+    //runner.enabled = false;
     engine.world.gravity.y = 0;
   }
 
@@ -224,7 +224,8 @@ p5.setup = function(){
   engine = Engine.create();
   world = engine.world;
   runner = Runner.create();
-  runner.enabled = false;
+  Runner.start(runner, engine);
+  engine.world.gravity.y = 0;
   //mouse
   var mouse = Mouse.create(canvas.elt);
   var mousePar = {
@@ -254,7 +255,7 @@ p5.setup = function(){
 p5.draw = function() {
 
   if (painting == true){
-    p5.background(230, 50);
+    p5.background(230, 100);
   } else if (painting == false){
     p5.background(230);
   }
@@ -270,17 +271,15 @@ p5.draw = function() {
       shapes.splice(i, 1);
     }
   }
-  p5.print(painting);
+  p5.print(painting, mConstraint.body);
 }
 //stores initial click
 p5.mousePressed = function() {
 
-  if (p5.mouseY > 100) {
-    painting = true;
-  }
-  p5.noStroke();
   previousPos.x = p5.mouseX;
   previousPos.y = p5.mouseY;
+  painting = true;
+
 
 }
 //bakes the shape
@@ -307,16 +306,21 @@ p5.mouseDragged = function() {
   rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
   rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
-  p5.fill(230, 200);
-  p5.stroke(40);
-    if (c == true) {
-      p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-    } else if (s == true) {
-      p5.rectMode(p5.CENTER);
-      p5.rect(previousPos.x, previousPos.y, rectW, rectH);
-    } else if (t == true) {
-      polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-    }
+  if (mConstraint.body == null) {
+    p5.fill(230, 200);
+    p5.stroke(40);
+  } else {
+    p5.noStroke();
+    p5.noFill();
+  }
+  if (c == true && painting == true) {
+    p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
+  } else if (s == true && painting == true) {
+    p5.rectMode(p5.CENTER);
+    p5.rect(previousPos.x, previousPos.y, rectW, rectH);
+  } else if (t == true && painting == true) {
+    polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
+  }
 
 
 }
