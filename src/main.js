@@ -17,6 +17,7 @@ var previousPos;
 var shapes = [];
 var c = true;
 var s = false;
+var t = false;
 var rectH;
 var rectW;
 
@@ -112,6 +113,44 @@ const sketch = (p5) => {
 
     }
   }
+  function poly(x, y, n, w, h) {
+
+    var options = {
+      friction : 0.9,
+      restitution : 0.6,
+      angle: 0
+    }
+    this.body = Bodies.polygon(x, y, n, p5.dist(x, y, w, h), options);
+    this.n = n;
+    this.w = w;
+    this.h = h;
+    this.b = this.body.bounds;
+
+    World.add(world, this.body);
+
+    this.isOffCanvas = function(){
+      var pos = this.body.position;
+      return (pos.y < 0);
+    }
+
+    this.forget = function(){
+      World.remove(world, this.body);
+    }
+
+    this.show = function() {
+      var pos = this.body.position;
+      var angle = this.body.angle;
+
+      p5.fill(40)
+      p5.stroke(40);
+      p5.push();
+      p5.translate(pos.x, pos.y);
+      p5.rotate(angle);
+      polygon(0, 0, this.n, p5.dist(x, y, this.w, this.h));
+      p5.pop();
+
+    }
+  }
 
 
 function toggleGravity() {
@@ -120,24 +159,46 @@ function toggleGravity() {
     gravButton.style("background-color", p5.color(255, 50, 50));
     runner.enabled = true;
     Runner.start(runner, engine);
+    engine.world.gravity.y = 1;
   } else if (runner.enabled == true) {
     gravButton.style("background-color", p5.color(250, 130, 40));
     Runner.stop(runner)
     runner.enabled = false;
+    engine.world.gravity.y = 0;
   }
 
 }
 
 function toggleShape() {
+
   if (c == true) {
     shapeButton.style("background-color", p5.color(255, 50, 50));
     s = true;
     c = false;
-  } else if (c == false) {
+    t = false;
+  } else if (t == true) {
     shapeButton.style("background-color", p5.color(250, 130, 40));
-    c = true;
     s = false;
+    c = true;
+    t = false;
+  } else if (s == true) {
+    shapeButton.style("background-color", p5.color(100, 50, 150));
+    s = false;
+    c = false;
+    t = true;
   }
+}
+
+function polygon(x, y, npoints, radius) {
+  var angle = p5.TWO_PI / npoints;
+  var offset = angle * 0.5;
+  p5.beginShape();
+  for (var a = 0; a < p5.TWO_PI; a += angle) {
+    var sx = x + p5.cos(a + offset) * radius;
+    var sy = y + p5.sin(a + offset) * radius;
+    p5.vertex(sx, sy);
+  }
+  p5.endShape(p5.CLOSE);
 }
 
 p5.setup = function(){
@@ -228,9 +289,10 @@ p5.mouseReleased = function() {
 
       if (c == true){
         shapes.push(new circ(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-
       } else if (s == true) {
         shapes.push(new square(previousPos.x, previousPos.y, rectW, rectH));
+      } else if (t == true) {
+        shapes.push(new poly(previousPos.x, previousPos.y, 3, currentPos.x, currentPos.y));
       }
     }
 }
@@ -252,6 +314,8 @@ p5.mouseDragged = function() {
     } else if (s == true) {
       p5.rectMode(p5.CENTER);
       p5.rect(previousPos.x, previousPos.y, rectW, rectH);
+    } else if (t == true) {
+      polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
     }
 
 

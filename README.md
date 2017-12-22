@@ -1,3 +1,3 @@
 ## Malevich
 
-A geometric drawing app for architects. 
+A geometric drawing app. 
