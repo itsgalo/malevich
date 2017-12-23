@@ -9,6 +9,8 @@ var h = window.innerHeight;
 var canvas;
 var gravButton;
 var shapeButton;
+var resetButton;
+var pauseButton;
 
 //Drawing constants
 var painting = false;
@@ -156,14 +158,22 @@ const sketch = (p5) => {
 function toggleGravity() {
   if(engine.world.gravity.y == 0) {
     gravButton.style("background-color", p5.color(255, 50, 50));
-    //runner.enabled = true;
-    //Runner.start(runner, engine);
     engine.world.gravity.y = 1;
   } else if (engine.world.gravity.y == 1) {
     gravButton.style("background-color", p5.color(250, 130, 40));
-    //Runner.stop(runner)
-    //runner.enabled = false;
     engine.world.gravity.y = 0;
+  }
+}
+
+function pauseScene() {
+  if(runner.enabled == false) {
+    pauseButton.style("background-color", p5.color(250, 130, 40));
+    runner.enabled = true;
+    Runner.start(runner, engine);
+  } else if (runner.enabled == true) {
+    pauseButton.style("background-color", p5.color(255, 50, 50));
+    Runner.stop(runner)
+    runner.enabled = false;
   }
 
 }
@@ -199,6 +209,9 @@ function polygon(x, y, npoints, radius) {
   }
   p5.endShape(p5.CLOSE);
 }
+function reset() {
+  location.reload();
+}
 
 p5.setup = function(){
   canvas = p5.createCanvas(w, h);
@@ -208,14 +221,21 @@ p5.setup = function(){
   var titleButton = p5.createButton('Malevi.ch');
   titleButton.position(20, 20);
   //gravity button
-  gravButton = p5.createButton('GRAVITY');
-  gravButton.position(w/2 - 170, 20);
+  gravButton = p5.createButton('FORCE');
+  gravButton.position(w/6 +50, 20);
   gravButton.mousePressed(toggleGravity);
-
   //shapes button
   shapeButton = p5.createButton('SHAPE');
-  shapeButton.position(w/2 + 30, 20);
+  shapeButton.position(w/6*2+50, 20);
   shapeButton.mousePressed(toggleShape);
+  //pause button
+  pauseButton = p5.createButton('PAUSE');
+  pauseButton.position(w/6*3 + 50, 20);
+  pauseButton.mousePressed(pauseScene);
+  //reset button
+  resetButton = p5.createButton('RESET');
+  resetButton.position(w/6*4 +50, 20);
+  resetButton.mousePressed(reset);
 
   currentPos = p5.createVector(0, 0);
   previousPos = p5.createVector(0, 0);
@@ -288,12 +308,12 @@ p5.mouseReleased = function() {
   rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
   rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
-  if (mConstraint.body == null && p5.mouseY > 100) {
+  if (mConstraint.body == null && p5.mouseY > 60) {
 
     if (c == true){
       shapes.push(new circ(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
     } else if (s == true) {
-      shapes.push(new square(previousPos.x, previousPos.y, rectW, rectH));
+      shapes.push(new square(previousPos.x, previousPos.y, rectW*2, rectH*2));
     } else if (t == true) {
       shapes.push(new poly(previousPos.x, previousPos.y, 3, currentPos.x, currentPos.y));
     }
@@ -317,7 +337,7 @@ p5.mouseDragged = function() {
     p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
   } else if (s == true && painting == true) {
     p5.rectMode(p5.CENTER);
-    p5.rect(previousPos.x, previousPos.y, rectW, rectH);
+    p5.rect(previousPos.x, previousPos.y, rectW*2, rectH*2);
   } else if (t == true && painting == true) {
     polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
   }
