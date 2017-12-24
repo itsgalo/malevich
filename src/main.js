@@ -6,7 +6,6 @@ import Dom from 'p5/lib/addons/p5.dom'
 //window settings
 var w = window.innerWidth;
 var h = window.innerHeight;
-var vMode = true;
 var canvas;
 var titleButton;
 var gravButton;
@@ -114,7 +113,7 @@ const sketch = (p5) => {
       var pos = this.body.position;
       var angle = this.body.angle;
 
-      p5.fill(40)
+      p5.fill(40);
       p5.stroke(40);
       p5.push();
       p5.rectMode(p5.CENTER);
@@ -185,7 +184,6 @@ function pauseScene() {
     Runner.stop(runner)
     runner.enabled = false;
   }
-
 }
 
 function toggleShape() {
@@ -238,6 +236,24 @@ function redrawButtons(w) {
   pauseButton.remove();
   resetButton.remove();
   drawButtons(w);
+  //button color booleans
+  if(engine.world.gravity.y == 1) {
+    gravButton.style("background-color", p5.color(255, 50, 50));
+  } else if (engine.world.gravity.y == 0) {
+    gravButton.style("background-color", p5.color(250, 130, 40));
+  }
+  if (c == true) {
+    shapeButton.style("background-color", p5.color(250, 130, 40));
+  } else if (t == true) {
+    shapeButton.style("background-color", p5.color(100, 50, 150));
+  } else if (s == true) {
+    shapeButton.style("background-color", p5.color(250, 50, 50));
+  }
+  if(runner.enabled == true) {
+    pauseButton.style("background-color", p5.color(250, 130, 40));
+  } else if (runner.enabled == false) {
+    pauseButton.style("background-color", p5.color(255, 50, 50));
+  }
 }
 function drawButtons(w) {
   //title button
@@ -283,13 +299,7 @@ function drawBoundaries(w, h) {
 }
 p5.setup = function(){
   canvas = p5.createCanvas(w, h);
-  if (p5.windowWidth < p5.windowHeight) {
-    vMode = true;
-  } else {
-    vMode = false;
-  }
   p5.background(0);
-  p5.ellipseMode(p5.RADIUS);
 
   drawButtons(w);
 
@@ -320,7 +330,6 @@ p5.setup = function(){
 }
 //p5 Draw
 p5.draw = function() {
-
   if (painting == true){
     p5.background(230, 100);
   } else if (painting == false){
@@ -337,7 +346,6 @@ p5.draw = function() {
       shapes[i].forget();
       shapes.splice(i, 1);
     }
-    //console.log(window.deviceOrientationEvent);
   }
 
 }
@@ -348,7 +356,6 @@ p5.mousePressed = function() {
   previousPos.y = p5.mouseY;
   painting = true;
   return false;
-
 
 }
 //bakes the shape
@@ -383,6 +390,7 @@ p5.mouseDragged = function() {
     p5.noFill();
   }
   if (c == true && painting == true) {
+    p5.ellipseMode(p5.RADIUS);
     p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
   } else if (s == true && painting == true) {
     p5.rectMode(p5.CENTER);
@@ -391,30 +399,20 @@ p5.mouseDragged = function() {
     polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
   }
 
-
 }
 
 p5.windowResized = function() {
   redrawButtons(p5.windowWidth);
-  redrawBoundaries(p5.windowWidth, p5.windowHeight)
-  p5.resizeCanvas(p5.windowWidth, p5.windowHeight)
-  if (p5.windowWidth < p5.windowHeight) {
-    vMode = true;
-  } else {
-    vMode = false;
-  }
-  if (vMode) {
-    for (var i = 0; i < shapes.length; i++) {
-      var newPos = p5.createVector(p5.windowWidth/2, p5.windowHeight/2);
-      Body.setPosition(shapes[i].body, newPos);
-    }
-  } else {
+  redrawBoundaries(p5.windowWidth, p5.windowHeight);
+  p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+
+  if (p5.windowWidth < 450 || p5.windowHeight < 450) {
     for (var i = 0; i < shapes.length; i++) {
       var newPos = p5.createVector(p5.windowWidth/2, p5.windowHeight/2);
       Body.setPosition(shapes[i].body, newPos);
     }
   }
-}
+  }
 
 }
 
