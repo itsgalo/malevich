@@ -6,11 +6,16 @@ import Dom from 'p5/lib/addons/p5.dom'
 //window settings
 var w = window.innerWidth;
 var h = window.innerHeight;
+var vMode = true;
 var canvas;
+var titleButton;
 var gravButton;
 var shapeButton;
 var resetButton;
 var pauseButton;
+var about = document.getElementById('about');
+var aboutUp = false;
+
 
 //Drawing constants
 var painting = false;
@@ -33,6 +38,11 @@ var Engine = Matter.Engine,
 var engine;
 var world;
 var runner;
+//Matter boundary vars
+var params;
+var ground;
+var wall1;
+var wall2;
 //mouse interaction vars
 var Mouse = Matter.Mouse;
 var MouseConstraint = Matter.MouseConstraint;
@@ -57,7 +67,7 @@ const sketch = (p5) => {
 
     this.isOffCanvas = function(){
       var pos = this.body.position;
-      return (pos.y < 0);
+      return (pos.y < 0 || pos.y > p5.windowHeight || pos.x > p5.windowWidth || pos.x < 0);
     }
 
     this.forget = function(){
@@ -93,7 +103,7 @@ const sketch = (p5) => {
 
     this.isOffCanvas = function(){
       var pos = this.body.position;
-      return (pos.y < 0);
+      return (pos.y < 0 || pos.y > p5.windowHeight || pos.x > p5.windowWidth || pos.x < 0);
     }
 
     this.forget = function(){
@@ -132,7 +142,7 @@ const sketch = (p5) => {
 
     this.isOffCanvas = function(){
       var pos = this.body.position;
-      return (pos.y < 0);
+      return (pos.y < 0 || pos.y > p5.windowHeight || pos.x > p5.windowWidth || pos.x < 0);
     }
 
     this.forget = function(){
@@ -212,30 +222,76 @@ function polygon(x, y, npoints, radius) {
 function reset() {
   location.reload();
 }
-
-p5.setup = function(){
-  canvas = p5.createCanvas(w, h);
-  p5.background(0);
-  p5.ellipseMode(p5.RADIUS);
-
-  var titleButton = p5.createButton('Malevi.ch');
+function popUp() {
+  if (aboutUp == false) {
+    about.style.display = "block";
+    aboutUp = true;
+  } else if (aboutUp == true) {
+    about.style.display = "none";
+    aboutUp = false;
+  }
+}
+function redrawButtons(w) {
+  titleButton.remove();
+  gravButton.remove();
+  shapeButton.remove();
+  pauseButton.remove();
+  resetButton.remove();
+  drawButtons(w);
+}
+function drawButtons(w) {
+  //title button
+  titleButton = p5.createButton('M');
   titleButton.position(20, 20);
+  titleButton.mousePressed(popUp);
   //gravity button
   gravButton = p5.createButton('FORCE');
-  gravButton.position(w/6 +50, 20);
+  gravButton.position(w/6 + (w/12)-44, 20);
   gravButton.mousePressed(toggleGravity);
   //shapes button
   shapeButton = p5.createButton('SHAPE');
-  shapeButton.position(w/6*2+50, 20);
+  shapeButton.position(w/6*2 + (w/12)-44, 20);
   shapeButton.mousePressed(toggleShape);
   //pause button
   pauseButton = p5.createButton('PAUSE');
-  pauseButton.position(w/6*3 + 50, 20);
+  pauseButton.position(w/6*3 + (w/12)-44, 20);
   pauseButton.mousePressed(pauseScene);
   //reset button
   resetButton = p5.createButton('RESET');
-  resetButton.position(w/6*4 +50, 20);
+  resetButton.position(w/6*4 + (w/12)-44, 20);
   resetButton.mousePressed(reset);
+}
+function redrawBoundaries(w, h) {
+  World.remove(world, ground);
+  World.remove(world, wall1);
+  World.remove(world, wall2);
+
+  drawBoundaries(w, h);
+}
+function drawBoundaries(w, h) {
+  params = {
+    isStatic: true,
+    friction: 0.5
+  }
+  ground = Bodies.rectangle(w / 2, h + 150, w, 300, params);
+  wall1 = Bodies.rectangle(-150, h / 2, 300, h, params);
+  wall2 = Bodies.rectangle(w + 150, h / 2, 300, h, params);
+  //var top = Bodies.rectangle(width / 2, 0, width, 1, params);
+  World.add(world, ground);
+  World.add(world, wall1);
+  World.add(world, wall2);
+}
+p5.setup = function(){
+  canvas = p5.createCanvas(w, h);
+  if (p5.windowWidth < p5.windowHeight) {
+    vMode = true;
+  } else {
+    vMode = false;
+  }
+  p5.background(0);
+  p5.ellipseMode(p5.RADIUS);
+
+  drawButtons(w);
 
   currentPos = p5.createVector(0, 0);
   previousPos = p5.createVector(0, 0);
@@ -259,17 +315,8 @@ p5.setup = function(){
   World.add(world, mConstraint);
 
   //boundaries
-  var params = {
-    isStatic: true,
-    friction: 0.5
-  }
-  var ground = Bodies.rectangle(w / 2, h, w, 10, params);
-  var wall1 = Bodies.rectangle(0, h / 2, 10, h, params);
-  var wall2 = Bodies.rectangle(w, h / 2, 10, h, params);
-  //var top = Bodies.rectangle(width / 2, 0, width, 1, params);
-  World.add(world, ground);
-  World.add(world, wall1);
-  World.add(world, wall2);
+  drawBoundaries(w, h);
+
 }
 //p5 Draw
 p5.draw = function() {
@@ -290,8 +337,9 @@ p5.draw = function() {
       shapes[i].forget();
       shapes.splice(i, 1);
     }
+    //console.log(window.deviceOrientationEvent);
   }
-  p5.print(painting, mConstraint.body);
+
 }
 //stores initial click
 p5.mousePressed = function() {
@@ -299,6 +347,7 @@ p5.mousePressed = function() {
   previousPos.x = p5.mouseX;
   previousPos.y = p5.mouseY;
   painting = true;
+  return false;
 
 
 }
@@ -346,7 +395,25 @@ p5.mouseDragged = function() {
 }
 
 p5.windowResized = function() {
+  redrawButtons(p5.windowWidth);
+  redrawBoundaries(p5.windowWidth, p5.windowHeight)
   p5.resizeCanvas(p5.windowWidth, p5.windowHeight)
+  if (p5.windowWidth < p5.windowHeight) {
+    vMode = true;
+  } else {
+    vMode = false;
+  }
+  if (vMode) {
+    for (var i = 0; i < shapes.length; i++) {
+      var newPos = p5.createVector(p5.windowWidth/2, p5.windowHeight/2);
+      Body.setPosition(shapes[i].body, newPos);
+    }
+  } else {
+    for (var i = 0; i < shapes.length; i++) {
+      var newPos = p5.createVector(p5.windowWidth/2, p5.windowHeight/2);
+      Body.setPosition(shapes[i].body, newPos);
+    }
+  }
 }
 
 }
