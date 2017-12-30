@@ -13,7 +13,7 @@ var shapeButton;
 var resetButton;
 var pauseButton;
 var about = document.getElementById('about');
-var aboutUp = false;
+var aboutUp = true;
 
 
 //Drawing constants
@@ -302,7 +302,12 @@ p5.setup = function(){
   p5.background(0);
 
   drawButtons(w);
-
+  window.onclick = function (event) {
+    if (event.target == about) {
+      about.style.display = "none";
+      aboutUp = false;
+    }
+  }
   currentPos = p5.createVector(0, 0);
   previousPos = p5.createVector(0, 0);
 
