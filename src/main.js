@@ -302,6 +302,13 @@ p5.setup = function(){
   p5.background(0);
 
   drawButtons(w);
+  //modal listeners
+  window.ontouchstart = function (event) {
+    if (event.target == about) {
+      about.style.display = "none";
+      aboutUp = false;
+    }
+  }
   window.onclick = function (event) {
     if (event.target == about) {
       about.style.display = "none";
@@ -344,6 +351,27 @@ p5.draw = function() {
   //Grab mouse position
   currentPos.x = p5.mouseX;
   currentPos.y = p5.mouseY;
+  //Listens for guides
+  //rectangle geometry calc
+  rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
+  rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
+
+  if (mConstraint.body == null) {
+    p5.fill(230, 200);
+    p5.stroke(40);
+  } else {
+    p5.noStroke();
+    p5.noFill();
+  }
+  if (c == true && p5.mouseIsPressed) {
+    p5.ellipseMode(p5.RADIUS);
+    p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
+  } else if (s == true && p5.mouseIsPressed) {
+    p5.rectMode(p5.CENTER);
+    p5.rect(previousPos.x, previousPos.y, rectW*2, rectH*2);
+  } else if (t == true && p5.mouseIsPressed) {
+    polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
+  }
 
   for (var i = 0; i < shapes.length; i++) {
     shapes[i].show();
@@ -380,30 +408,6 @@ p5.mouseReleased = function() {
     }
     painting = false;
   }
-}
-//draws guide lines
-p5.mouseDragged = function() {
-  //rectangle geometry calc
-  rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
-  rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
-
-  if (mConstraint.body == null) {
-    p5.fill(230, 200);
-    p5.stroke(40);
-  } else {
-    p5.noStroke();
-    p5.noFill();
-  }
-  if (c == true && painting == true) {
-    p5.ellipseMode(p5.RADIUS);
-    p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-  } else if (s == true && painting == true) {
-    p5.rectMode(p5.CENTER);
-    p5.rect(previousPos.x, previousPos.y, rectW*2, rectH*2);
-  } else if (t == true && painting == true) {
-    polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-  }
-
 }
 
 p5.windowResized = function() {
