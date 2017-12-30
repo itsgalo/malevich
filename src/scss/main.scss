@@ -22,7 +22,7 @@ button {
   cursor: pointer;
 }
 .popup {
-  display: block;
+  display: inline-block;
   position: fixed;
   margin: 0 auto;
   top: 0;
@@ -38,12 +38,12 @@ button {
   font-family: 'Karla', Arial, Helvetica, sans-serif;
   font-size: 10pt;
   letter-spacing: 2pt;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 @media only screen and (max-device-width: 450px){
-  body {
-    overflow: auto;
-  }
+
   button {
     background-color: rgb(250, 130, 40);
     border: 0px;
@@ -60,6 +60,7 @@ button {
   .popup-content {
     margin: 20% auto;
     width: 60%;
+    padding: 20px;
     font-size: 8pt;
   }
 }
