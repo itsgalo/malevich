@@ -12,9 +12,7 @@ var gravButton;
 var shapeButton;
 var resetButton;
 var saveButton;
-var about = document.getElementById('about');
 var aboutUp = false;
-
 
 //Drawing constants
 var painting = false;
@@ -165,22 +163,30 @@ const sketch = (p5) => {
 
 
 function toggleGravity() {
-  if(engine.world.gravity.y == 0) {
+  if(engine.world.gravity.y === 0) {
     gravButton.style("background-color", p5.color(100, 100, 100));
     engine.world.gravity.y = 1;
-  } else if (engine.world.gravity.y == 1) {
+  } else if (engine.world.gravity.y === 1) {
     gravButton.style("background-color", p5.color(200, 200, 200));
     engine.world.gravity.y = 0;
   }
 }
 
 function saveScene() {
-  p5.save('MyMalevich.jpg');
-  if(runner.enabled == false) {
+
+  p5.saveCanvas('MyMalevich','png');
+  //var download = document.getElementById("saveas");
+  //var image = document.getElementById("defaultCanvas0").toDataURL("image/png")
+  //            .replace("image/png", "image/octet-stream");
+  //download.setAttribute('download','MyMalevich.png');
+  //download.setAttribute("href", image);
+  //window.open(image);
+
+  if(runner.enabled === false) {
     //pauseButton.style("background-color", p5.color(250, 130, 40));
     //runner.enabled = true;
     //Runner.start(runner, engine);
-  } else if (runner.enabled == true) {
+  } else if (runner.enabled === true) {
     //pauseButton.style("background-color", p5.color(255, 50, 50));
     //Runner.stop(runner)
     //runner.enabled = false;
@@ -189,17 +195,17 @@ function saveScene() {
 
 function toggleShape() {
 
-  if (c == true) {
+  if (c === true) {
     shapeButton.style("background-color", p5.color(250, 250, 250));
     s = true;
     c = false;
     t = false;
-  } else if (t == true) {
+  } else if (t === true) {
     shapeButton.style("background-color", p5.color(200, 200, 200));
     s = false;
     c = true;
     t = false;
-  } else if (s == true) {
+  } else if (s === true) {
     shapeButton.style("background-color", p5.color(150, 150, 150));
     s = false;
     c = false;
@@ -222,10 +228,10 @@ function reset() {
   location.reload();
 }
 function popUp() {
-  if (aboutUp == false) {
+  if (aboutUp === false) {
     document.getElementById('about').style.display = "block";
     aboutUp = true;
-  } else if (aboutUp == true) {
+  } else if (aboutUp === true) {
     document.getElementById('about').style.display = "none";
     aboutUp = false;
   }
@@ -238,21 +244,21 @@ function redrawButtons(w) {
   resetButton.remove();
   drawButtons(w);
   //button color booleans
-  if(engine.world.gravity.y == 1) {
+  if(engine.world.gravity.y === 1) {
     gravButton.style("background-color", p5.color(100, 100, 100));
-  } else if (engine.world.gravity.y == 0) {
+  } else if (engine.world.gravity.y === 0) {
     gravButton.style("background-color", p5.color(200, 200, 200));
   }
-  if (c == true) {
+  if (c === true) {
     shapeButton.style("background-color", p5.color(200, 200, 200));
-  } else if (t == true) {
+  } else if (t === true) {
     shapeButton.style("background-color", p5.color(150, 150, 150));
-  } else if (s == true) {
+  } else if (s === true) {
     shapeButton.style("background-color", p5.color(250, 250, 250));
   }
-  if(runner.enabled == true) {
+  if(runner.enabled === true) {
     //saveButton.style("background-color", p5.color(250, 130, 40));
-  } else if (runner.enabled == false) {
+  } else if (runner.enabled === false) {
     //saveButton.style("background-color", p5.color(255, 50, 50));
   }
 }
@@ -272,6 +278,7 @@ function drawButtons(w) {
   //pause button
   saveButton = p5.createButton('SAVE');
   saveButton.position(w/5 * 3, 0);
+  saveButton.id("saveas");
   saveButton.mousePressed(saveScene);
   //reset button
   resetButton = p5.createButton('RESET');
@@ -299,19 +306,21 @@ function drawBoundaries(w, h) {
   World.add(world, wall2);
 }
 p5.setup = function(){
+
+  p5.pixelDensity(1);
   canvas = p5.createCanvas(w, h);
   p5.background(20);
 
   drawButtons(w);
   //modal listeners
   window.ontouchstart = function (event) {
-    if (event.target == document.getElementById('about') || event.target == document.getElementById('modal')) {
+    if (event.target === document.getElementById('about') || event.target === document.getElementById('modal')) {
       document.getElementById('about').style.display = "none";
       aboutUp = false;
     }
   }
   window.onclick = function (event) {
-    if (event.target == document.getElementById('about') || event.target == document.getElementById('modal')) {
+    if (event.target === document.getElementById('about') || event.target === document.getElementById('modal')) {
       document.getElementById('about').style.display = "none";
       aboutUp = false;
     }
@@ -343,9 +352,9 @@ p5.setup = function(){
 }
 //p5 Draw
 p5.draw = function() {
-  if (painting == true){
+  if (painting === true){
     p5.background(20, 100);
-  } else if (painting == false){
+  } else if (painting === false){
     p5.background(20);
   }
   //Draw shape
@@ -357,20 +366,20 @@ p5.draw = function() {
   rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
   rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
-  if (mConstraint.body == null) {
+  if (mConstraint.body === null) {
     p5.fill(20, 200);
     p5.stroke(240);
   } else {
     p5.noStroke();
     p5.noFill();
   }
-  if (c == true && p5.mouseIsPressed) {
+  if (c === true && p5.mouseIsPressed) {
     p5.ellipseMode(p5.RADIUS);
     p5.ellipse(previousPos.x, previousPos.y, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-  } else if (s == true && p5.mouseIsPressed) {
+  } else if (s === true && p5.mouseIsPressed) {
     p5.rectMode(p5.CENTER);
     p5.rect(previousPos.x, previousPos.y, rectW*2, rectH*2);
-  } else if (t == true && p5.mouseIsPressed) {
+  } else if (t === true && p5.mouseIsPressed) {
     polygon(previousPos.x, previousPos.y, 3, p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
   }
 
@@ -398,13 +407,13 @@ p5.mouseReleased = function() {
   rectH = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(previousPos.x, 0, currentPos.x, 0)));
   rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
-  if (mConstraint.body == null && p5.mouseY > 60) {
+  if (mConstraint.body === null && p5.mouseY > 60) {
 
-    if (c == true){
+    if (c === true){
       shapes.push(new circ(previousPos.x, previousPos.y, currentPos.x, currentPos.y));
-    } else if (s == true) {
+    } else if (s === true) {
       shapes.push(new square(previousPos.x, previousPos.y, rectW*2, rectH*2));
-    } else if (t == true) {
+    } else if (t === true) {
       shapes.push(new poly(previousPos.x, previousPos.y, 3, currentPos.x, currentPos.y));
     }
     painting = false;

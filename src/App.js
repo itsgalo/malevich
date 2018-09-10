@@ -7,7 +7,7 @@ export default class App extends Component {
 //root elements are elements managed by react, a single DOM element
   componentDidMount() {
     document.title = "Malevi.ch";
-    main(this.element);
+    //main(this.element);
 
   }
   render() {
