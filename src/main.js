@@ -13,7 +13,7 @@ var shapeButton;
 var resetButton;
 var pauseButton;
 var about = document.getElementById('about');
-var aboutUp = true;
+var aboutUp = false;
 
 
 //Drawing constants

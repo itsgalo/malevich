@@ -21,6 +21,7 @@ button {
   padding: 10px 50px;
   cursor: pointer;
 }
+
 .popup {
   display: inline-block;
   position: fixed;
@@ -52,9 +53,8 @@ button {
     font-size: 9pt;
     font-weight: bold;
     padding-top: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
     padding-bottom: 10px;
+    width: 25%;
     cursor: cell;
   }
   .popup-content {

@@ -1,8 +1,6 @@
-import main from './main'
-import "./scss/main.scss"
 
-export default (document) => {
-  const element = document.getElementById('root');
-  main({element});
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
 
-}
+ReactDOM.render(<App />, document.getElementById('root'));

@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
+import main from './main'
+import "./scss/main.scss"
+
 
 export default class App extends Component {
 //root elements are elements managed by react, a single DOM element
   componentDidMount() {
-    document.title = "Malevi.sch";
+    document.title = "Malevi.ch";
+    main(this.element);
+
   }
   render() {
     return (
-      <div id="about" class="popup">
-        <div class="popup-content">
+      <div>
+        <div id="about" className="popup">
+        <div className="popup-content">
           <h1>Malevi.ch 1.0</h1>
           <p>a project by <a href="http://officeca.com">office ca</a></p>
           <a>instructions:</a>
@@ -19,6 +25,8 @@ export default class App extends Component {
           <p>PAUSE freezes/unfreezes current composition state</p>
           <p>RESET clears everything</p>
         </div>
+      </div>
+      <div ref={element => this.element} />
       </div>
     )
   }
