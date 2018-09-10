@@ -11,7 +11,7 @@ var titleButton;
 var gravButton;
 var shapeButton;
 var resetButton;
-var pauseButton;
+var saveButton;
 var about = document.getElementById('about');
 var aboutUp = false;
 
@@ -76,8 +76,8 @@ const sketch = (p5) => {
     this.show = function() {
       var pos = this.body.position;
 
-      p5.fill(40);
-      p5.stroke(40);
+      p5.fill(240);
+      p5.stroke(240);
       p5.push();
       p5.translate(pos.x, pos.y)
 
@@ -113,8 +113,8 @@ const sketch = (p5) => {
       var pos = this.body.position;
       var angle = this.body.angle;
 
-      p5.fill(40);
-      p5.stroke(40);
+      p5.fill(240);
+      p5.stroke(240);
       p5.push();
       p5.rectMode(p5.CENTER);
       p5.translate(pos.x, pos.y);
@@ -152,8 +152,8 @@ const sketch = (p5) => {
       var pos = this.body.position;
       var angle = this.body.angle;
 
-      p5.fill(40)
-      p5.stroke(40);
+      p5.fill(240)
+      p5.stroke(240);
       p5.push();
       p5.translate(pos.x, pos.y);
       p5.rotate(angle);
@@ -166,40 +166,41 @@ const sketch = (p5) => {
 
 function toggleGravity() {
   if(engine.world.gravity.y == 0) {
-    gravButton.style("background-color", p5.color(255, 50, 50));
+    gravButton.style("background-color", p5.color(100, 100, 100));
     engine.world.gravity.y = 1;
   } else if (engine.world.gravity.y == 1) {
-    gravButton.style("background-color", p5.color(250, 130, 40));
+    gravButton.style("background-color", p5.color(200, 200, 200));
     engine.world.gravity.y = 0;
   }
 }
 
-function pauseScene() {
+function saveScene() {
+  p5.save('MyMalevich.jpg');
   if(runner.enabled == false) {
-    pauseButton.style("background-color", p5.color(250, 130, 40));
-    runner.enabled = true;
-    Runner.start(runner, engine);
+    //pauseButton.style("background-color", p5.color(250, 130, 40));
+    //runner.enabled = true;
+    //Runner.start(runner, engine);
   } else if (runner.enabled == true) {
-    pauseButton.style("background-color", p5.color(255, 50, 50));
-    Runner.stop(runner)
-    runner.enabled = false;
+    //pauseButton.style("background-color", p5.color(255, 50, 50));
+    //Runner.stop(runner)
+    //runner.enabled = false;
   }
 }
 
 function toggleShape() {
 
   if (c == true) {
-    shapeButton.style("background-color", p5.color(255, 50, 50));
+    shapeButton.style("background-color", p5.color(250, 250, 250));
     s = true;
     c = false;
     t = false;
   } else if (t == true) {
-    shapeButton.style("background-color", p5.color(250, 130, 40));
+    shapeButton.style("background-color", p5.color(200, 200, 200));
     s = false;
     c = true;
     t = false;
   } else if (s == true) {
-    shapeButton.style("background-color", p5.color(100, 50, 150));
+    shapeButton.style("background-color", p5.color(150, 150, 150));
     s = false;
     c = false;
     t = true;
@@ -222,10 +223,10 @@ function reset() {
 }
 function popUp() {
   if (aboutUp == false) {
-    about.style.display = "block";
+    document.getElementById('about').style.display = "block";
     aboutUp = true;
   } else if (aboutUp == true) {
-    about.style.display = "none";
+    document.getElementById('about').style.display = "none";
     aboutUp = false;
   }
 }
@@ -233,26 +234,26 @@ function redrawButtons(w) {
   titleButton.remove();
   gravButton.remove();
   shapeButton.remove();
-  pauseButton.remove();
+  saveButton.remove();
   resetButton.remove();
   drawButtons(w);
   //button color booleans
   if(engine.world.gravity.y == 1) {
-    gravButton.style("background-color", p5.color(255, 50, 50));
+    gravButton.style("background-color", p5.color(100, 100, 100));
   } else if (engine.world.gravity.y == 0) {
-    gravButton.style("background-color", p5.color(250, 130, 40));
+    gravButton.style("background-color", p5.color(200, 200, 200));
   }
   if (c == true) {
-    shapeButton.style("background-color", p5.color(250, 130, 40));
+    shapeButton.style("background-color", p5.color(200, 200, 200));
   } else if (t == true) {
-    shapeButton.style("background-color", p5.color(100, 50, 150));
+    shapeButton.style("background-color", p5.color(150, 150, 150));
   } else if (s == true) {
-    shapeButton.style("background-color", p5.color(250, 50, 50));
+    shapeButton.style("background-color", p5.color(250, 250, 250));
   }
   if(runner.enabled == true) {
-    pauseButton.style("background-color", p5.color(250, 130, 40));
+    //saveButton.style("background-color", p5.color(250, 130, 40));
   } else if (runner.enabled == false) {
-    pauseButton.style("background-color", p5.color(255, 50, 50));
+    //saveButton.style("background-color", p5.color(255, 50, 50));
   }
 }
 function drawButtons(w) {
@@ -269,9 +270,9 @@ function drawButtons(w) {
   shapeButton.position(w/5 * 2, 0);
   shapeButton.mousePressed(toggleShape);
   //pause button
-  pauseButton = p5.createButton('PAUSE');
-  pauseButton.position(w/5 * 3, 0);
-  pauseButton.mousePressed(pauseScene);
+  saveButton = p5.createButton('SAVE');
+  saveButton.position(w/5 * 3, 0);
+  saveButton.mousePressed(saveScene);
   //reset button
   resetButton = p5.createButton('RESET');
   resetButton.position(w/5 * 4, 0);
@@ -299,19 +300,19 @@ function drawBoundaries(w, h) {
 }
 p5.setup = function(){
   canvas = p5.createCanvas(w, h);
-  p5.background(0);
+  p5.background(20);
 
   drawButtons(w);
   //modal listeners
   window.ontouchstart = function (event) {
-    if (event.target == about) {
-      about.style.display = "none";
+    if (event.target == document.getElementById('about') || event.target == document.getElementById('modal')) {
+      document.getElementById('about').style.display = "none";
       aboutUp = false;
     }
   }
   window.onclick = function (event) {
-    if (event.target == about) {
-      about.style.display = "none";
+    if (event.target == document.getElementById('about') || event.target == document.getElementById('modal')) {
+      document.getElementById('about').style.display = "none";
       aboutUp = false;
     }
   }
@@ -343,9 +344,9 @@ p5.setup = function(){
 //p5 Draw
 p5.draw = function() {
   if (painting == true){
-    p5.background(230, 100);
+    p5.background(20, 100);
   } else if (painting == false){
-    p5.background(230);
+    p5.background(20);
   }
   //Draw shape
   //Grab mouse position
@@ -357,8 +358,8 @@ p5.draw = function() {
   rectW = p5.sqrt(p5.sq(p5.dist(previousPos.x, previousPos.y, currentPos.x, currentPos.y))-p5.sq(p5.dist(0, previousPos.y, 0, currentPos.y)));
 
   if (mConstraint.body == null) {
-    p5.fill(230, 200);
-    p5.stroke(40);
+    p5.fill(20, 200);
+    p5.stroke(240);
   } else {
     p5.noStroke();
     p5.noFill();
