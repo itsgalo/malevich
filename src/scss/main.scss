@@ -14,11 +14,11 @@ button {
   position: relative;
   background-color: rgb(250, 130, 40);
   border: 0px;
-  font-family: 'Karla', Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
   letter-spacing: 2pt;
-  font-size: 12pt;
-  font-weight: bold;
-  padding: 14px;
+  font-size: 24pt;
+  width: 25%;
+  padding: 10px 50px;
   cursor: pointer;
 }
 .popup {
@@ -32,12 +32,12 @@ button {
 }
 .popup-content {
   background-color: rgb(250, 130, 40);
-  margin: 14% auto;
+  margin: 10% auto;
   padding: 30px;
   width: 50%;
-  font-family: 'Karla', Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
   font-size: 10pt;
-  letter-spacing: 2pt;
+  letter-spacing: 1pt;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

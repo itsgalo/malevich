@@ -258,23 +258,23 @@ function redrawButtons(w) {
 function drawButtons(w) {
   //title button
   titleButton = p5.createButton('M');
-  titleButton.position(20, 20);
+  titleButton.position(0, 0);
   titleButton.mousePressed(popUp);
   //gravity button
   gravButton = p5.createButton('FORCE');
-  gravButton.position(w/6 + (w/12)-44, 20);
+  gravButton.position(w/5, 0);
   gravButton.mousePressed(toggleGravity);
   //shapes button
   shapeButton = p5.createButton('SHAPE');
-  shapeButton.position(w/6*2 + (w/12)-44, 20);
+  shapeButton.position(w/5 * 2, 0);
   shapeButton.mousePressed(toggleShape);
   //pause button
   pauseButton = p5.createButton('PAUSE');
-  pauseButton.position(w/6*3 + (w/12)-44, 20);
+  pauseButton.position(w/5 * 3, 0);
   pauseButton.mousePressed(pauseScene);
   //reset button
   resetButton = p5.createButton('RESET');
-  resetButton.position(w/6*4 + (w/12)-44, 20);
+  resetButton.position(w/5 * 4, 0);
   resetButton.mousePressed(reset);
 }
 function redrawBoundaries(w, h) {
