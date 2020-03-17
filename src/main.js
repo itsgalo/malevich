@@ -266,23 +266,29 @@ function drawButtons(w) {
   titleButton = p5.createButton('M');
   titleButton.position(0, 0);
   titleButton.mousePressed(popUp);
+  titleButton.touchStarted(popUp);
   //gravity button
   gravButton = p5.createButton('FORCE');
   gravButton.position(w/5, 0);
   gravButton.mousePressed(toggleGravity);
+  gravButton.touchStarted(toggleGravity);
   //shapes button
   shapeButton = p5.createButton('SHAPE');
   shapeButton.position(w/5 * 2, 0);
   shapeButton.mousePressed(toggleShape);
+  shapeButton.touchStarted(toggleShape);
   //pause button
   saveButton = p5.createButton('SAVE');
   saveButton.position(w/5 * 3, 0);
   saveButton.id("saveas");
   saveButton.mousePressed(saveScene);
+  saveButton.touchStarted(saveScene);
   //reset button
   resetButton = p5.createButton('RESET');
   resetButton.position(w/5 * 4, 0);
   resetButton.mousePressed(reset);
+  resetButton.touchStarted(reset);
+
 }
 function redrawBoundaries(w, h) {
   World.remove(world, ground);
