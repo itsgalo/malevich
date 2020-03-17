@@ -1,6 +1,5 @@
 import Matter from 'matter-js'
 import p5 from 'p5'
-import Dom from 'p5/lib/addons/p5.dom'
 
 
 //window settings
@@ -225,7 +224,7 @@ function polygon(x, y, npoints, radius) {
   p5.endShape(p5.CLOSE);
 }
 function reset() {
-  location.reload();
+  window.location.reload();
 }
 function popUp() {
   if (aboutUp === false) {
@@ -305,6 +304,7 @@ function drawBoundaries(w, h) {
   World.add(world, wall1);
   World.add(world, wall2);
 }
+//setup
 p5.setup = function(){
 
   p5.pixelDensity(1);
