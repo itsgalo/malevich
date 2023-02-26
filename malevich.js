@@ -1,7 +1,3 @@
-import Matter from 'matter-js'
-import p5 from 'p5'
-
-
 //window settings
 var w = window.innerWidth;
 var h = window.innerHeight;
